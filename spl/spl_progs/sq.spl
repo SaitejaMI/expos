@@ -1,0 +1,8 @@
+alias counter R0;
+alias sq R1;
+counter = 0;
+while(counter <=20) do
+sq = counter*counter;
+print sq;
+counter = counter + 1;
+endwhile;
