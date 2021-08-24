@@ -1,3 +1,6 @@
+loadi(4, 17);
+loadi(5, 18);
+
 loadi(63,13);
 loadi(64,14);
 
@@ -9,6 +12,9 @@ loadi(23,36);
 
 loadi(2, 15);
 loadi(3, 16);
+
+loadi (16,29);
+loadi (17,30);
 
  PTBR = PAGE_TABLE_BASE;
  PTLR = 10;
@@ -45,7 +51,7 @@ loadi(3, 16);
 [PROCESS_TABLE + 1] = 0;
 [SYSTEM_STATUS_TABLE + 1] = 0;
 
-[76*512] = 0;
-SP = 2*512;
+[76*512] = [65*512 +1];
+SP = 8*512;
 
 ireturn;

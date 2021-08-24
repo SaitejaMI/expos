@@ -1,0 +1,32 @@
+type
+Student{
+        str name;
+        int marks;
+}
+endtype
+
+decl
+student fun(student t);
+enddecl
+
+node fun(node t){
+begin
+t.name="John";
+t.marks=89;
+return t;
+end
+}
+
+int main(){
+decl student details;
+enddecl
+
+begin
+details=alloc();
+details.name = "John";
+details.marks = 89;
+write(details.name);
+write(details.marks);
+return 0;
+end
+}
