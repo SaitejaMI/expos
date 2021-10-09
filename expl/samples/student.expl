@@ -5,23 +5,14 @@ Student{
 }
 endtype
 
-decl
-student fun(student t);
-enddecl
-
-node fun(node t){
-begin
-t.name="John";
-t.marks=89;
-return t;
-end
-}
-
 int main(){
-decl student details;
+decl 
+int n;
+Student details;
 enddecl
 
 begin
+n=initialize();
 details=alloc();
 details.name = "John";
 details.marks = 89;

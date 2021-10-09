@@ -2,11 +2,12 @@ int main()
 {
 decl
     int temp,num;
+    str abc;
 enddecl
 begin
-    num=1;
-    while ( num <= 50 ) do
-         temp = exposcall ( "Write" , -2, num );
+    abc="hello";
+    while ( num <= 100 ) do
+         temp = exposcall ( "Write" , -2, abc);
          num = num + 1;
     endwhile;
     return 0;
