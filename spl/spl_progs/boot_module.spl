@@ -6,6 +6,9 @@ loadi(88,69); //even numbers
 loadi(22, 35); //--int=10
 loadi(23, 36);
 
+loadi(8,21); //--int=console
+loadi(9,22);
+
 loadi(2,15); //--exhandler
 loadi(3,16);
 
@@ -15,8 +18,17 @@ loadi(64,14);
 loadi(4,17); //--int=timer
 loadi(5,18);
 
+loadi(14,27); // --int=6 read_int
+loadi(15,28);
+
 loadi(16,29); //--int=7 write_int
 loadi(17,30);
+
+loadi(40,53); //MOD-0
+loadi(41,54);
+
+loadi(48,61); //MOD-4
+loadi(49,62);
 
 loadi(50,63); //MOD-5 scheduler
 loadi(51,64);
