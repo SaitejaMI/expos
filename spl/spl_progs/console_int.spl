@@ -20,6 +20,7 @@ R2 = reqID;
 call MOD_0;
 
 restore;
+restore;
 
 SP = [PROCESS_TABLE + (16*[SYSTEM_STATUS_TABLE + 1]) + 13];
 

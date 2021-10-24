@@ -9,14 +9,14 @@ process_table_entry = PROCESS_TABLE +currentPID *16;
 
 [process_table_entry +4] = READY;
 
-alias newPID R2;
-        newPID = 0;
+//alias newPID R2;
+//        newPID = 0;
 
-while(newPID<16) do
-        if([PROCESS_TABLE+(newPID*16)+4] != -1) then
-                [PROCESS_TABLE+(newPID*16)] = [PROCESS_TABLE+(newPID*16)]+1;        endif;
-        newPID=newPID+1;
-endwhile;
+//while(newPID<16) do
+//        if([PROCESS_TABLE+(newPID*16)+4] != -1) then
+//                [PROCESS_TABLE+(newPID*16)] = [PROCESS_TABLE+(newPID*16)]+1;        endif;
+//        newPID=newPID+1;
+//endwhile;
 
 call MOD_5;
 restore;
