@@ -1,107 +1,97 @@
-//--------------------------MEMORY MANAGER MODULE----------------//
+alias funcNo R1;
 
-alias funNum R1;
-
-if(funNum == 1)		then
-	
-	[SYSTEM_STATUS_TABLE+3] = [SYSTEM_STATUS_TABLE+3] +1;	//wait mem cnt
-
-	//free mem cnt
-	while([SYSTEM_STATUS_TABLE + 2] == 0)	do
-		
-		[PROCESS_TABLE + (16*[SYSTEM_STATUS_TABLE + 1]) + 4] = 11;
-		
-		backup;
-		call MOD_5;
-		restore;
-	endwhile;
-
-	[SYSTEM_STATUS_TABLE + 3] = [SYSTEM_STATUS_TABLE + 3] -1;	//wait mem cnt
-	[SYSTEM_STATUS_TABLE + 2] = [SYSTEM_STATUS_TABLE + 2] -1;	//mem free cnt
-
-	alias i R6;
-	i = 0 ;
-
-	while( i < 128)	do
-		if([MEMORY_FREE_LIST + i] == 0)	then
-			[MEMORY_FREE_LIST + i] = 1;
-			break;
-		endif;
-		i = i+1;
-	endwhile;
-
-	R0 = i;
-
-	breakpoint;
-	return;
-	
+if(funcNo == 4) then
+    //R2 has block
+    [DISK_FREE_LIST + R2] = [DISK_FREE_LIST + R2] - 1;
+    return;
 endif;
 
-if(funNum == 2)	then
-	alias pageNum R2;
-	[MEMORY_FREE_LIST + pageNum] = [MEMORY_FREE_LIST + pageNum] -1;		
-	if([MEMORY_FREE_LIST + pageNum] == 0)	then
-		[SYSTEM_STATUS_TABLE + 2] = [SYSTEM_STATUS_TABLE + 2] + 1;	//mem free cnt
+if(R1 == 5) then
 
-		alias i R7;
-		i = 0;
-		while(i < 16)	do
-			if( [PROCESS_TABLE + (16*i) + 4] == 11)	then
-				[PROCESS_TABLE + (16*i) + 4] = 1;
-			endif;
-			i = i + 1;
-		endwhile;
-	endif;
-	breakpoint;
-	return;
-
-if(funNum == RELEASE_BLOCK) then
-        alias blockNum R2;
-        [DISK_FREE_LIST + blockNum] = [DISK_FREE_LIST + blockNum] - 1;
-        return;
-endif;
-
-if(funNum == GET_CODE_PAGE) then
-        alias blockNum R2;
+        //backup;
+        alias block_num R2;	//R2 contains block num
         alias i R3;
         alias block R4;
-        alias pageNum R0;
+        alias page_num R0;
 
-        //if we get a page which is already present in the memory
-        i=0;
-        while(i<16) do
-                block =4;
-
-                while(block<8) do
-                        if([DISK_MAP_TABLE+(10*i)+block]==blockNum&&[PAGE_TABLE_BASE+20*i+2*(block)] != -1) then
-                                pageNum = [PAGE_TABLE_BASE + 20*i + 2*block];
-                                [MEMORY_FREE_LIST + pageNum] = [MEMORY_FREE_LIST +pageNum]+1;
-
-                                breakpoint;
-                                return;
+        // IF WE GET A PAGE WHICH IS ALREADY PRESENT IN MEMORY	
+        i = 0;
+        while(i < 16) do
+                block = 4;
+                while(block < 8) do
+                        if([DISK_MAP_TABLE+10*i+block]==block_num&&[PAGE_TABLE_BASE+20*i+2*(block)]!=-1) then
+                                page_num = [PAGE_TABLE_BASE + 20*i + 2*block];
+                                [MEMORY_FREE_LIST + page_num] = [MEMORY_FREE_LIST + page_num] + 1;
+                return;
                         endif;
-
-                        block = block+1;
+                        block = block + 1;
                 endwhile;
-        i=i+1;
+        i = i+1;
         endwhile;
 
-        // if no free page is present
+        // IF NO FREE PAGE IS PRESENT AT MOMENT
+	R1 = 1;
+	call MOD_2;                 //MEMORY_MANAGER
 
-        R1 = 3;
+	R1 = 2;
+	R4 = block_num;
+	R2 = [SYSTEM_STATUS_TABLE+1];
+	R3 = R0;	// page_num got from GET_FREE_PAGE
+	call MOD_4;                 //DEVICE_MANGER
 
-        call MOD_2;
+	return;
 
-        R1 = 2;
-        R4 = blockNum;
-        R2 = [SYSTEM_STATUS_TABLE+1];
-        R3 = R0;
-
-        call MOD_4;
-
-        breakpoint;
-
-        return;
 endif;
 
+if(funcNo == 2) then
+
+    alias pageNo R2;
+    [MEMORY_FREE_LIST+pageNo] = [MEMORY_FREE_LIST+pageNo]-1;
+
+    if([MEMORY_FREE_LIST+pageNo]==0) then
+        [SYSTEM_STATUS_TABLE+2] = [SYSTEM_STATUS_TABLE+2]+1;    //MEM_FREE_COUNT
+    endif;
+
+    alias i R3;
+    i=0;
+    while(i<16) do
+        if([PROCESS_TABLE+16*i+4]==11) then
+            [PROCESS_TABLE+16*i+4] = READY;
+        endif;
+        i = i+1;
+    endwhile;
+
+    return;
+endif;
+
+if(R1 == 1)then
+    //return in R0
+
+    [SYSTEM_STATUS_TABLE+3] = [SYSTEM_STATUS_TABLE+3]+1;    //WAIT_MEM_COUNT
+    while([SYSTEM_STATUS_TABLE+2]==0) do
+
+        [PROCESS_TABLE+16*[SYSTEM_STATUS_TABLE+1]+4] = 11;
+
+        backup;
+        call MOD_5;
+        restore;
+    endwhile;
+
+    [SYSTEM_STATUS_TABLE+3] = [SYSTEM_STATUS_TABLE+3]-1;    //WAIT_MEM_COUNT
+    [SYSTEM_STATUS_TABLE+2] = [SYSTEM_STATUS_TABLE+2]-1;    //MEM_FREE_COUNT
+
+    alias i R3;
+    i = 76;
+
+    while(i<MAX_MEM_PAGE) do
+        if([MEMORY_FREE_LIST+i]==0) then
+            [MEMORY_FREE_LIST+i] = 1;
+            R0 = i;
+
+            break;
+        endif;
+        i = i+1;
+    endwhile;
+
+    return;
 endif;

@@ -61,7 +61,7 @@ PTLR = [new_pro_entry + 15];
 if( [new_pro_entry + 4] == CREATED )	then
 
 	SP = [new_pro_entry + 13];
-	//BP = [[new_pro_entry + 11]*512];
+	BP = [[new_pro_entry + 11]*512];
 
 	[new_pro_entry + 4] = RUNNING;
 	[new_pro_entry + 9] = 0;
