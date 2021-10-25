@@ -48,6 +48,8 @@ loadi(51,64);
 loadi(59,3); //inode table
 loadi(60,4);
 
+loadi(61,2); //disk free list
+
 loadi(67,9); //shell
 loadi(68,10);
 

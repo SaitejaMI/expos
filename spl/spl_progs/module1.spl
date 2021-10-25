@@ -56,5 +56,24 @@ if(funNum == 4)	then
 		endif;
 		i = i + 2;
 	endwhile;
+
+        alias diskMap R5;
+        diskMap = DISK_MAP_TABLE + 10*curID;
+
+        //removing blocks using disk map table
+        while(i<10) do
+                if(([diskMap+i]!=-1)&&((i==2)||(i==3)||(i==8)||(i==9))) then
+                backup;
+
+                R1 = 4;
+                R2 = [diskMap +i];
+
+                call MOD_2;
+
+                restore;
+                endif;
+                [diskMap + i] = -1;
+                i=i+1;
+        endwhile;
 	return;
 endif;
