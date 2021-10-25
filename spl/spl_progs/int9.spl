@@ -57,6 +57,16 @@ SP = (userAreaPageNo*512)-1;
 [PROCESS_TABLE + (16*[SYSTEM_STATUS_TABLE+1]) + 4] = RUNNING;
 [PROCESS_TABLE + (16*[SYSTEM_STATUS_TABLE+1]) + 7] = inodeIdx;
 
+R7 = userAreaPageNo*512 + RESOURCE_TABLE_OFFSET;
+[R7 +2*0] = -1;
+[R7 +2*1] = -1;
+[R7 +2*2] = -1;
+[R7 +2*3] = -1;
+[R7 +2*4] = -1;
+[R7 +2*5] = -1;
+[R7 +2*6] = -1;
+[R7 +2*7] = -1;
+
 PTBR = PAGE_TABLE_BASE + [SYSTEM_STATUS_TABLE + 1]*20;
 PTLR = 10;
 
@@ -115,8 +125,15 @@ if([INODE_TABLE+(16*inodeIdx) + 8] != -1)	then
 	[PTBR + 8] = R0;
 	[PTBR + 9] = "0100";
 	restore;
+        
+        backup;
+        R1 = 2;
+        R2 = [SYSTEM_STATUS_TABLE +1];
+        R3 = [PTBR +8];
+        R4 = [INODE_TABLE+(16*inodeIdx) + 8];
 
-	loadi([PTBR + 8] ,[INODE_TABLE+(16*inodeIdx) + 8]);
+        call MOD_4;//device manager module
+        restore;
 endif;
 
 if([INODE_TABLE+(16*inodeIdx) + 9] != -1)	then
@@ -127,8 +144,16 @@ if([INODE_TABLE+(16*inodeIdx) + 9] != -1)	then
 	[PTBR + 10] = R0;
 	[PTBR + 11] = "0100";
 	restore;
+ 
+        backup;
+        R1 = 2;
+        R2 = [SYSTEM_STATUS_TABLE +1];
+        R3 = [PTBR +10];
+        R4 = [INODE_TABLE+(16*inodeIdx)+9];
 
-	loadi([PTBR + 10] ,[INODE_TABLE+(16*inodeIdx) + 9]);
+        call MOD_4;//device manager module
+        restore;
+
 endif;
 
 if([INODE_TABLE+(16*inodeIdx) + 10] != -1)	then
@@ -139,8 +164,16 @@ if([INODE_TABLE+(16*inodeIdx) + 10] != -1)	then
 	[PTBR + 12] = R0;
 	[PTBR + 13] = "0100";
 	restore;
+ 
+        backup;
+        R1 = 2;
+        R2 = [SYSTEM_STATUS_TABLE +1];
+        R3 = [PTBR +12];
+        R4 = [INODE_TABLE+(16*inodeIdx)+10];
 
-	loadi([PTBR + 12] ,[INODE_TABLE+(16*inodeIdx) + 10]);
+        call MOD_4;//device manager module
+        restore;
+
 endif;
 
 if([INODE_TABLE+(16*inodeIdx) + 11] != -1)	then
@@ -152,7 +185,14 @@ if([INODE_TABLE+(16*inodeIdx) + 11] != -1)	then
 	[PTBR + 15] = "0100";
 	restore;
 
-	loadi([PTBR + 14] ,[INODE_TABLE+(16*inodeIdx) + 11]);
+        backup;
+        R1 = 2;
+        R2 = [SYSTEM_STATUS_TABLE +1];
+        R3 = [PTBR +14];
+        R4 = [INODE_TABLE+(16*inodeIdx)+11];
+
+        call MOD_4;//device manager module
+        restore;
 endif;
 
 //-----------------------------------------------------

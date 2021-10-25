@@ -47,4 +47,32 @@ if(funNum == TERMINAL_READ)	then
 	[[PTBR + 2*(R3/512)]*512 + (R3%512)] = [PROCESS_TABLE + (16*[SYSTEM_STATUS_TABLE+1]) + 8];
 endif;
 	
+if(funNum == 2) then
+        alias pageNum R3;
+        alias blockNum R4;
+
+        backup;
+
+        R1 = 3;
+        R2 = curID;
+
+        call MOD_0;
+        restore;
+
+        [DISK_STATUS_TABLE+1] = 0;
+        [DISK_STATUS_TABLE+2] = pageNum;
+        [DISK_STATUS_TABLE+3] = blockNum;
+
+        load(pageNum,blockNum);
+
+        [PROCESS_TABLE + (16*curID)+4] = 5;
+
+        backup;
+
+        call MOD_5;
+        restore;
+
+        return;
+endif;
+
 return;

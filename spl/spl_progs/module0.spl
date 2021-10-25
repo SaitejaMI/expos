@@ -43,3 +43,17 @@ if(funNum == RELEASE_TERMINAL)	then
 
 	return;
 endif;
+
+if(funNum == 3) then
+        while([DISK_STATUS_TABLE]==1) do
+                [PROCESS_TABLE + curID*16 +4] = 5;
+                backup;
+                call MOD_5;
+                restore;
+
+        endwhile;
+        [DISK_STATUS_TABLE] =1;
+        [DISK_STATUS_TABLE+4] = curID;
+
+        return;
+endif;
